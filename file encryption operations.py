@@ -1,7 +1,22 @@
+import os
+import socket
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
+
+class SecureUploader:
+    """Incomplete"""
+    def __init__(self, server: str, port: int) -> None:
+        self.server = server
+        self.port = port
+
+    def upload(self, path: str) -> None:
+        with open(path, "rb") as f:
+            file_bytes = f.read()
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((self.server, self.port))
+            s.sendall(file_bytes)
 
 class AES:
     """AES 128-bit symmetric encryption for files."""
@@ -74,11 +89,18 @@ class RSA:
         with open(path, "rb") as f:
             file_bytes = f.read()
         with open(path, "wb") as f:
-            f.write(b"".join([self.__public_key.encrypt(file_bytes[i:i+self.__public_key_data_chunking_size], padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None)) for i in range(0, len(file_bytes), 190)]))
+            f.write(b"".join([self.__public_key.encrypt(file_bytes[i:i+self.__public_key_data_chunking_size], padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None)) for i in range(0, len(file_bytes), self.__public_key_data_chunking_size)]))
 
     def decrypt(self, path: str) -> None:
         """Decrypts the file located at the specified path."""
         with open(path, "rb") as f:
             file_bytes = f.read()
         with open(path, "wb") as f:
-            f.write(b"".join([self.__private_key.decrypt(file_bytes[i:i+self.__private_key_data_chunking_size], padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None)) for i in range(0, len(file_bytes), 256)]))
+            f.write(b"".join([self.__private_key.decrypt(file_bytes[i:i+self.__private_key_data_chunking_size], padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None)) for i in range(0, len(file_bytes), self.__private_key_data_chunking_size)]))
+
+class Miscellaneous:
+    def __init__(self, path: str) -> None:
+        self.path = path
+
+    def exists(self) -> bool:
+        return os.path.exists(self.path)
