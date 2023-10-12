@@ -33,7 +33,7 @@ class AES:
             file_bytes = f.read()
         try:
             self.__key.decrypt(file_bytes)
-        except:
+        except (InvalidToken, ValueError):
             return False
         else:
             return True
