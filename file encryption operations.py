@@ -47,7 +47,7 @@ class RSA:
     """
     def __init__(self, public_key: bytes | None = None, private_key: bytes | None = None) -> None:
         if not public_key and not private_key:
-            raise ValueError("At least one parameter is required to be specified.")
+            raise ValueError("At least one of 'public_key' or 'private_key' should be provided.")
         else:
             if public_key:
                 self.__public_key = serialization.load_pem_public_key(public_key, backend=default_backend())
