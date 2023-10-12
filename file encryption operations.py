@@ -64,7 +64,7 @@ class RSA:
         Key size options are limited to: 1024 bits, 2048 bits and 4096 bits.
         """
         if key_size != 1024 and key_size != 2048 and key_size != 4096:
-            raise ValueError("Key size options are limited to: 1024, 2048 or 4096.")
+            raise ValueError("Key size options are limited to: 1024, 2048 and 4096.")
         else:
             private_key = rsa.generate_private_key(public_exponent=65537, key_size=key_size)
             return (private_key.public_key().public_bytes(encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo), private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8, encryption_algorithm=serialization.NoEncryption()))
