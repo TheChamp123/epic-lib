@@ -95,7 +95,7 @@ class RSA:
         Example usage: 
         
         ```
-        public_key, private_key = RSA.get_keys("path\\\\to\\\\public\\\\key.pem", "path\\\\to\\\\private\\\\key.pem")
+        public_key, private_key = RSA.get_keys("path/to/public/key.pem", "path/to/private/key.pem")
         RSA(public_key, private_key)
         ```
         """
