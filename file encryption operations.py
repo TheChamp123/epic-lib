@@ -69,6 +69,42 @@ class RSA:
             private_key = rsa.generate_private_key(public_exponent=65537, key_size=key_size)
             return (private_key.public_key().public_bytes(encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo), private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8, encryption_algorithm=serialization.NoEncryption()))
 
+    @staticmethod
+    def store_keys(public_key: bytes, private_key: bytes, public_file_name: str, private_file_name: str, directory: str | None = None) -> None:
+        """
+        Creates two PEM files for saving a key pair at the given directory, respectively named using the given names.
+        
+        If 'directory' is not specified, the PEM files will be created in the active directory.
+        """
+        if not directory:
+            with open(public_file_name + ".pem", "wb") as f:
+                f.write(public_key)
+            with open(private_file_name + ".pem", "wb") as f:
+                f.write(private_key)
+        else:
+            with open(os.path.join(directory, public_file_name) + ".pem", "wb") as f:
+                f.write(public_key)
+            with open(os.path.join(directory, private_file_name) + ".pem", "wb") as f:
+                f.write(private_key)
+
+    @staticmethod
+    def get_keys(public_path: str, private_path: str) -> tuple[bytes]:
+        """
+        Returns a tuple of a key pair collected from their respective paths, which can then be given to an RSA object.
+
+        Example usage: 
+        
+        ```
+        public_key, private_key = RSA.get_keys("path\\\\to\\\\public\\\\key.pem", "path\\\\to\\\\private\\\\key.pem")
+        RSA(public_key, private_key)
+        ```
+        """
+        with open(public_path, "rb") as f:
+            public_key = f.read()
+        with open(private_path, "rb") as f:
+            private_key = f.read()
+        return (public_key, private_key)
+
     def encrypt(self, path: str) -> None:
         """Encrypts the file located at the specified path."""
         with open(path, "rb") as f:
