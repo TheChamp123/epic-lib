@@ -88,9 +88,10 @@ class RSA:
                 f.write(private_key)
 
     @staticmethod
-    def get_keys(public_path: str, private_path: str) -> tuple[bytes]:
+    def get_keys(public_path: str | None = None, private_path: str | None = None) -> tuple[bytes] | bytes:
         """
-        Returns a tuple of a key pair collected from their respective paths, which can then be given to an RSA object.
+        Returns a tuple of a key pair collected from their respective paths, which can then be given to an RSA object. 
+        Both parameters are optional, meaning it is possible to get only a public key or only a private key, although at least one must be provided.
 
         Example usage: 
         
@@ -98,12 +99,31 @@ class RSA:
         public_key, private_key = RSA.get_keys("path/to/public/key.pem", "path/to/private/key.pem")
         RSA(public_key, private_key)
         ```
+
+        or
+
+        ```
+        public_key = RSA.get_keys(public_path="path/to/public/key.pem")
+        RSA(public_key)
+        ```
         """
-        with open(public_path, "rb") as f:
-            public_key = f.read()
-        with open(private_path, "rb") as f:
-            private_key = f.read()
-        return (public_key, private_key)
+        if not public_path and not private_path:
+            raise ValueError("At least one of 'public_path' or 'private_path' should be provided.")
+        else:
+            if public_path and not private_path:
+                with open(public_path, "rb") as f:
+                    public_key = f.read()
+                return public_key
+            elif private_path and not public_path:
+                with open(private_path, "rb") as f:
+                    private_key = f.read()
+                return private_key
+            elif public_path and private_path:
+                with open(public_path, "rb") as f:
+                    public_key = f.read()
+                with open(private_path, "rb") as f:
+                    private_key = f.read()
+                return (public_key, private_key)
 
     def encrypt(self, path: str) -> None:
         """Encrypts the file located at the specified path."""
