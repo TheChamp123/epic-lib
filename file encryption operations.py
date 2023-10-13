@@ -1,4 +1,4 @@
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
@@ -72,7 +72,7 @@ class RSA:
     @staticmethod
     def store_keys(public_key: bytes, private_key: bytes, public_file_name: str, private_file_name: str, directory: str | None = None) -> None:
         """
-        Creates two PEM files containing the given key pair at the given directory, respectively named using the given names.
+        Creates two PEM files for saving a key pair at the given directory, respectively named using the given names.
         
         If 'directory' is not specified, the PEM files will be created in the active directory.
         """
