@@ -91,7 +91,7 @@ class RSA:
     def get_keys(public_path: str | None = None, private_path: str | None = None) -> tuple[bytes] | bytes:
         """
         Returns a tuple of a key pair collected from their respective paths, which can then be given to an RSA object. 
-        Both parameters are optional, meaning it is possible to get only a public key or only a private key, although at least one must be provided.
+        Both parameters are optional, meaning it is possible to return only a public key or only a private key, although at least one must be provided.
 
         Example usage: 
         
