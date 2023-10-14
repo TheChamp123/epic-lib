@@ -109,21 +109,20 @@ class RSA:
         """
         if not public_path and not private_path:
             raise ValueError("At least one of 'public_path' or 'private_path' should be provided.")
-        else:
-            if public_path and not private_path:
-                with open(public_path, "rb") as f:
-                    public_key = f.read()
-                return public_key
-            elif private_path and not public_path:
-                with open(private_path, "rb") as f:
-                    private_key = f.read()
-                return private_key
-            elif public_path and private_path:
-                with open(public_path, "rb") as f:
-                    public_key = f.read()
-                with open(private_path, "rb") as f:
-                    private_key = f.read()
-                return (public_key, private_key)
+        elif public_path and not private_path:
+            with open(public_path, "rb") as f:
+                public_key = f.read()
+            return public_key
+        elif private_path and not public_path:
+            with open(private_path, "rb") as f:
+                private_key = f.read()
+            return private_key
+        elif public_path and private_path:
+            with open(public_path, "rb") as f:
+                public_key = f.read()
+            with open(private_path, "rb") as f:
+                private_key = f.read()
+            return (public_key, private_key)
 
     def encrypt(self, path: str) -> None:
         """Encrypts the file located at the specified path."""
