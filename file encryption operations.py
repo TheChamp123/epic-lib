@@ -76,17 +76,17 @@ class RSA:
         
         If 'directory' is not specified, the PEM files will be created in the active directory.
         """
-        if not directory:
-            with open(public_file_name + ".pem", "wb") as f:
-                f.write(public_key)
-            with open(private_file_name + ".pem", "wb") as f:
-                f.write(private_key)
-        else:
+        if directory:
             with open(os.path.join(directory, public_file_name) + ".pem", "wb") as f:
                 f.write(public_key)
             with open(os.path.join(directory, private_file_name) + ".pem", "wb") as f:
                 f.write(private_key)
-
+        else:
+            with open(public_file_name + ".pem", "wb") as f:
+                f.write(public_key)
+            with open(private_file_name + ".pem", "wb") as f:
+                f.write(private_key)
+    
     @staticmethod
     def get_keys(public_path: str | None = None, private_path: str | None = None) -> tuple[bytes] | bytes:
         """
